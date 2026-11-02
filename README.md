@@ -44,9 +44,12 @@ npm run dev
    (`0001` -> `0005`), or with the Supabase CLI: `supabase db push`.
 4. **Load sample data (optional but recommended first):** run `supabase/seed.sql`
    in the SQL Editor to populate 12 colours, 10 products and 6 example orders.
-5. **Storage for product photos:** Storage -> New bucket -> name it
-   `product-images`, set it **public** (read-only). The admin panel uploads
-   compressed images here.
+5. **Storage for product photos:** `supabase/migrations/0006_storage.sql` (also
+   included in `setup.sql`) creates the public-read `product-images` bucket and
+   its policies (only admins may upload). If you prefer the dashboard: Storage ->
+   New bucket -> name it `product-images`, set it **public**, then still run
+   `0006_storage.sql` so uploads are allowed. The admin panel compresses images
+   to WebP in the browser before uploading.
 
 ## Creating the admin account
 

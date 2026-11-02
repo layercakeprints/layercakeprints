@@ -1,0 +1,9 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AdminApp from '@/components/islands/admin/AdminApp.tsx';
+---
+
+<BaseLayout title="Admin">
+  <!-- Admin is auth-gated and noindex; render entirely on the client. -->
+  <AdminApp client:only="preact" />
+</BaseLayout>

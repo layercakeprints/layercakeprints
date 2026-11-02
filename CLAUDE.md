@@ -75,10 +75,22 @@ product listing or product pages.
 2. Migrations + RLS + RPC + seed (done)
 3. Public layout + design (home + product page) - done
 4. Colour configurator + cart + checkout + order status - done
-5. Admin panel - next
-6. Tests, privacy, deploy
+5. Admin panel - done
+6. Tests, privacy, deploy - next
 
 ## Admin
 
 Created manually (no public sign-up). See `README.md` and `supabase/add_admin.sql`.
 Admin UI is mobile-first (big buttons, single column).
+
+- Route `/admin` (`src/pages/admin/index.astro`) renders `AdminApp` as
+  `client:only="preact"` - it is auth-gated and `noindex`, so no SSR.
+- Islands live in `src/components/islands/admin/`: `AdminApp` (auth gate + tabs +
+  sample-data banner), `AdminOrders` (filters, search, one-click status, print
+  queue by colour), `AdminProducts` (CRUD + image upload), `AdminFilaments`
+  (in-stock toggle), `AdminStats`.
+- All admin data access is in `src/lib/admin.ts`. It talks to Supabase directly
+  as the signed-in admin; RLS (`is_admin()`) is what actually authorises writes.
+- Product photos upload to the `product-images` Storage bucket (public read),
+  downscaled + re-encoded to WebP in the browser first (`compressImage`).
+- Model licence is required; the editor warns when it looks non-commercial (NC).
