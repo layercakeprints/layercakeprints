@@ -1,0 +1,146 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import ProductArt from '@/components/ProductArt.astro';
+import FilamentDot from '@/components/FilamentDot.astro';
+import { site } from '@/config/site';
+import { getCatalog, categoriesOf } from '@/lib/catalog';
+
+const { colors, products, source } = await getCatalog();
+const featured = products.filter((p) => p.featured);
+const categories = categoriesOf(products);
+
+const steps = [
+  { n: '1', t: 'Pick a print', d: 'Browse the shop and choose what you want.' },
+  { n: '2', t: 'Choose colours', d: 'Mix and match filament colours live on each product.' },
+  { n: '3', t: 'Order', d: 'Add to your bag and leave a nickname - that is it.' },
+  { n: '4', t: 'Pay cash when you collect', d: 'We print it, you grab it and pay cash. Easy.' },
+];
+---
+
+<BaseLayout>
+  <Header slot="header" />
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="mx-auto max-w-5xl px-4 pt-10 pb-8 sm:pt-16 sm:pb-12 grid sm:grid-cols-2 gap-8 items-center">
+      <div>
+        <span class="sticker bg-lime text-ink">Made to order</span>
+        <h1 class="mt-4 text-5xl sm:text-6xl font-extrabold leading-[0.95]">
+          {site.name}
+        </h1>
+        <p class="mt-3 text-2xl font-display font-bold text-grape">{site.tagline}</p>
+        <p class="mt-4 text-ink-soft max-w-sm">{site.blurb}</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="#shop" class="rounded-full bg-grape text-white font-semibold px-6 py-3 shadow-pop hover:bg-grape-dark transition-colors">Shop prints</a>
+          <a href="#how" class="rounded-full bg-card border border-line font-semibold px-6 py-3 hover:border-grape transition-colors">How it works</a>
+        </div>
+      </div>
+      <div class="relative h-56 sm:h-72" aria-hidden="true">
+        <div class="absolute left-2 top-2 w-32 h-32 sm:w-40 sm:h-40 bg-card rounded-blob border border-line shadow-card grid place-items-center rotate-[-8deg]">
+          <ProductArt slug="articulated-dragon" class="w-4/5 h-4/5" />
+        </div>
+        <div class="absolute right-0 top-10 w-28 h-28 sm:w-36 sm:h-36 bg-card rounded-blob border border-line shadow-card grid place-items-center rotate-[7deg]">
+          <ProductArt slug="flexi-octopus" class="w-4/5 h-4/5" />
+        </div>
+        <div class="absolute left-16 bottom-0 w-28 h-28 sm:w-36 sm:h-36 bg-card rounded-blob border border-line shadow-card grid place-items-center rotate-[4deg]">
+          <ProductArt slug="fidget-spinner" class="w-4/5 h-4/5" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {featured.length > 0 && (
+    <section class="mx-auto max-w-5xl px-4 py-6">
+      <h2 class="text-2xl font-extrabold mb-4">Featured</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {featured.map((p) => <ProductCard product={p} />)}
+      </div>
+    </section>
+  )}
+
+  <!-- Shop + category filter -->
+  <section id="shop" class="mx-auto max-w-5xl px-4 py-6 scroll-mt-20">
+    <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+      <h2 class="text-2xl font-extrabold">Shop</h2>
+      <div id="filters" class="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
+        <button type="button" class="filter-btn is-active" data-filter="all">All</button>
+        {categories.map((c) => (
+          <button type="button" class="filter-btn" data-filter={c}>{c}</button>
+        ))}
+      </div>
+    </div>
+    <div id="grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {products.map((p) => <ProductCard product={p} />)}
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" class="mx-auto max-w-5xl px-4 py-10 scroll-mt-20">
+    <h2 class="text-2xl font-extrabold mb-5">How it works</h2>
+    <ol class="grid sm:grid-cols-4 gap-4">
+      {steps.map((s) => (
+        <li class="bg-card rounded-xl2 border border-line p-5">
+          <span class="inline-grid place-items-center w-9 h-9 rounded-full bg-grape text-white font-mono font-bold">{s.n}</span>
+          <h3 class="mt-3 text-lg font-bold">{s.t}</h3>
+          <p class="text-sm text-ink-soft mt-1">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- Filament palette -->
+  <section class="mx-auto max-w-5xl px-4 py-6">
+    <h2 class="text-2xl font-extrabold mb-1">Filament colours</h2>
+    <p class="text-ink-soft mb-5">Greyed-out colours are out of stock right now.</p>
+    <ul class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3">
+      {colors.map((c) => <li><FilamentDot color={c} /></li>)}
+    </ul>
+  </section>
+
+  {source === 'fixtures' && (
+    <p class="mx-auto max-w-5xl px-4 text-xs text-ink-soft/70 pb-4">
+      Preview using sample data (Supabase not connected).
+    </p>
+  )}
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .filter-btn {
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+    transition: all 0.15s ease;
+  }
+  .filter-btn:hover { border-color: var(--color-grape); }
+  .filter-btn.is-active {
+    background: var(--color-ink);
+    color: #fff;
+    border-color: var(--color-ink);
+  }
+</style>
+
+<script>
+  // Progressive enhancement: category filter. With no JS, all products show.
+  const filters = document.getElementById('filters');
+  const grid = document.getElementById('grid');
+  if (filters && grid) {
+    filters.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
+      if (!btn) return;
+      const want = btn.dataset.filter;
+      filters.querySelectorAll('.filter-btn').forEach((b) => b.classList.toggle('is-active', b === btn));
+      grid.querySelectorAll<HTMLElement>('[data-category]').forEach((card) => {
+        const show = want === 'all' || card.dataset.category === want;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  }
+</script>

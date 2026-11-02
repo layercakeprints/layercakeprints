@@ -1,0 +1,18 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+const base = import.meta.env.BASE_URL;
+const home = base.replace(/\/$/, '') || '/';
+---
+
+<BaseLayout title="Not found">
+  <Header slot="header" />
+  <section class="mx-auto max-w-5xl px-4 py-20 text-center">
+    <p class="font-mono text-6xl font-bold text-grape">404</p>
+    <h1 class="mt-4 text-3xl font-extrabold">This page went off the print bed</h1>
+    <p class="mt-3 text-ink-soft">We could not find what you were looking for.</p>
+    <a href={home} class="inline-block mt-6 rounded-full bg-grape text-white font-bold px-6 py-3 shadow-pop hover:bg-grape-dark transition-colors">Back to shop</a>
+  </section>
+  <Footer slot="footer" />
+</BaseLayout>

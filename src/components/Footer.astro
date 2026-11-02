@@ -1,0 +1,20 @@
+---
+import { site } from '@/config/site';
+const base = import.meta.env.BASE_URL;
+const link = (p: string) => `${base}/${p}`.replace(/\/{2,}/g, '/');
+---
+
+<footer class="mt-16 border-t border-line">
+  <div class="mx-auto max-w-5xl px-4 py-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+    <div>
+      <p class="font-display text-lg font-extrabold">{site.name}</p>
+      <p class="text-sm text-ink-soft mt-1">{site.tagline}</p>
+      <p class="text-sm text-ink-soft mt-3">{site.payment.label} &middot; made to order</p>
+    </div>
+    <nav class="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
+      <a href={link('')} class="hover:text-grape">Shop</a>
+      <a href={link('#how')} class="hover:text-grape">How it works</a>
+      <a href={link('privacy')} class="hover:text-grape">Privacy</a>
+    </nav>
+  </div>
+</footer>

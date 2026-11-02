@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens. Tailwind v4 reads these to generate utilities
+   (bg-grape, text-ink, font-display, rounded-blob, ...).
+   Youthful + energetic but clean. Target age 12-17, not toddler.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Fonts (self-hosted via fontsource, imported in BaseLayout) */
+  --font-sans: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", var(--font-sans);
+  --font-mono: "Space Mono", ui-monospace, "SF Mono", monospace;
+
+  /* Brand palette */
+  --color-ink: #17141c;
+  --color-ink-soft: #4b4553;
+  --color-paper: #fbf7ff;
+  --color-card: #ffffff;
+  --color-line: #ece4f5;
+
+  --color-grape: #6d28d9;
+  --color-grape-dark: #54199f;
+  --color-bubble: #ec4899;
+  --color-lime: #74b816;
+  --color-sun: #f97316;
+  --color-sky: #2563eb;
+
+  /* Radii - big and rounded */
+  --radius-xl2: 1.75rem;
+  --radius-blob: 2.5rem;
+
+  /* Shadows */
+  --shadow-pop: 0 10px 30px -12px rgba(109, 40, 217, 0.35);
+  --shadow-card: 0 2px 0 0 var(--color-line), 0 18px 40px -28px rgba(23, 20, 28, 0.4);
+}
+
+/* Base */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-paper);
+}
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Sticker-style label */
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  line-height: 1;
+  transform: rotate(-2deg);
+  box-shadow: 0 2px 0 rgba(23, 20, 28, 0.12);
+}
+
+/* Focus visibility for keyboard users (WCAG) */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-grape);
+  outline-offset: 2px;
+  border-radius: 0.4rem;
+}
+
+/* Respect reduced motion everywhere */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
