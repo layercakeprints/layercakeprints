@@ -35,16 +35,13 @@ npm run dev
 2. **Get your keys:** Project Settings -> API. Copy the **Project URL** and the
    **anon public** key into `.env` (and later into GitHub Secrets). Never copy
    the `service_role` key anywhere in this repo or the browser.
-3. **Run the migrations** in order. Dashboard -> SQL Editor -> paste and run each
-   file from `supabase/migrations/`:
-   - `0001_schema.sql`
-   - `0002_rls.sql`
-   - `0003_functions.sql`
-   - `0004_cron.sql` (enable the `pg_cron` extension first if prompted:
-     Database -> Extensions -> pg_cron)
-   - `0005_sample_data.sql`
+3. **Create the schema.** Easiest: Dashboard -> SQL Editor -> paste the whole of
+   `supabase/setup.sql` (all migrations in order) and run it once. If prompted
+   that `pg_cron` is missing, enable it (Database -> Extensions -> pg_cron) and
+   run again - the cron part is safe to re-run.
 
-   (Or, with the Supabase CLI: `supabase db push`.)
+   Alternatively run the files individually from `supabase/migrations/`
+   (`0001` -> `0005`), or with the Supabase CLI: `supabase db push`.
 4. **Load sample data (optional but recommended first):** run `supabase/seed.sql`
    in the SQL Editor to populate 12 colours, 10 products and 6 example orders.
 5. **Storage for product photos:** Storage -> New bucket -> name it

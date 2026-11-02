@@ -56,6 +56,12 @@ file headers for what each does. Key RPCs:
 
 Sample rows use UUID prefixes: colours `1111...`, products `2222...`, orders `3333...`.
 
+`supabase/setup.sql` is a generated concatenation of `migrations/0001..0005` for
+one-paste setup. Do not hand-edit it: change the migration files and regenerate.
+
+> Note: this machine's global gitignore ignores `*.sql` and `CLAUDE.md`, so these
+> must be force-added: `git add -f supabase/**/*.sql supabase/*.sql CLAUDE.md`.
+
 ## Static + fresh data
 
 Pages are built statically from Supabase at build time (SSG). Islands re-fetch via
