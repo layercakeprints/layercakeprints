@@ -1,4 +1,4 @@
-# CLAUDE.md - PLAyground
+# CLAUDE.md - Layer Cake Prints
 
 Guidance for working in this repo. (Project brand/config lives in `src/config/site.ts`.)
 
@@ -73,9 +73,9 @@ product listing or product pages.
 
 1. Plan/schema/structure (done)
 2. Migrations + RLS + RPC + seed (done)
-3. Public layout + design (home + product page) - review gate
-4. Colour configurator + cart + checkout + order status
-5. Admin panel
+3. Public layout + design (home + product page) - done
+4. Colour configurator + cart + checkout + order status - done
+5. Admin panel - next
 6. Tests, privacy, deploy
 
 ## Admin

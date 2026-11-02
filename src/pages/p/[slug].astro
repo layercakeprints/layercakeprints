@@ -2,9 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
-import ProductArt from '@/components/ProductArt.astro';
-import { site } from '@/config/site';
-import { formatPrice } from '@/lib/pricing';
+import ColorConfigurator from '@/components/islands/ColorConfigurator.tsx';
 import { getCatalog } from '@/lib/catalog';
 import type { FilamentColor, Product } from '@/lib/types';
 
@@ -25,13 +23,17 @@ const base = import.meta.env.BASE_URL;
 const home = base.replace(/\/$/, '') || '/';
 
 const allowed = colors.filter((c) => product.allowed_color_ids.includes(c.id));
-const inStock = allowed.filter((c) => c.in_stock);
-
-// Default preview colours for the illustration.
-const defaults = [inStock[0], inStock[1] ?? inStock[0]].filter(Boolean) as FilamentColor[];
-const artStyle = defaults.map((c, i) => `--slot-${i}:${c.hex}`).join(';');
-
-const leadText = `Ready in ~${product.lead_time_days} day${product.lead_time_days === 1 ? '' : 's'}`;
+const configProduct = {
+  id: product.id,
+  slug: product.slug,
+  name: product.name,
+  description: product.description,
+  price_gbp: product.price_gbp,
+  lead_time_days: product.lead_time_days,
+  featured: product.featured,
+  color_slots: product.color_slots,
+  slot_labels: product.slot_labels,
+};
 ---
 
 <BaseLayout title={product.name} description={product.short_description}>
@@ -42,54 +44,10 @@ const leadText = `Ready in ~${product.lead_time_days} day${product.lead_time_day
       <span aria-hidden="true">&larr;</span> Back to shop
     </a>
 
-    <div class="mt-4 grid md:grid-cols-2 gap-8">
-      <!-- Illustration -->
-      <div class="bg-card rounded-blob border border-line shadow-card aspect-square grid place-items-center p-6 md:sticky md:top-20">
-        <ProductArt slug={product.slug} title={product.name} class="w-4/5 h-4/5" style={artStyle} />
-      </div>
-
-      <!-- Details -->
-      <div>
-        {product.featured && <span class="sticker bg-bubble text-white">★ Popular</span>}
-        <h1 class="mt-3 text-4xl font-extrabold leading-tight">{product.name}</h1>
-        <div class="mt-2 flex items-center gap-3">
-          <span class="font-mono text-2xl font-bold text-grape">{formatPrice(product.price_gbp)}</span>
-          <span class="text-sm font-semibold text-ink-soft">{leadText}</span>
-        </div>
-        <p class="mt-4 text-ink-soft">{product.description}</p>
-
-        <!-- Colour choices (live configurator lands in stage 4) -->
-        <div class="mt-6 space-y-5">
-          {Array.from({ length: product.color_slots }).map((_, slot) => (
-            <fieldset>
-              <legend class="text-sm font-bold mb-2">{product.slot_labels[slot] ?? `Colour ${slot + 1}`}</legend>
-              <div class="flex flex-wrap gap-2">
-                {allowed.map((c) => (
-                  <span
-                    class:list={['grid place-items-center w-10 h-10 rounded-full border-2 border-ink/15', !c.in_stock && 'opacity-40']}
-                    style={`background:${c.hex}`}
-                    title={`${c.name}${c.in_stock ? '' : ' (out of stock)'}`}
-                  >
-                    <span class="sr-only">{c.name}</span>
-                  </span>
-                ))}
-              </div>
-            </fieldset>
-          ))}
-        </div>
-
-        <div class="mt-7 flex items-center gap-3">
-          <div class="inline-flex items-center rounded-full border border-line bg-card">
-            <button type="button" class="w-10 h-10 grid place-items-center text-xl" aria-label="Decrease quantity">-</button>
-            <span class="w-8 text-center font-mono font-bold">1</span>
-            <button type="button" class="w-10 h-10 grid place-items-center text-xl" aria-label="Increase quantity">+</button>
-          </div>
-          <button type="button" class="flex-1 rounded-full bg-grape text-white font-bold px-6 py-3 shadow-pop hover:bg-grape-dark transition-colors">
-            Add to bag
-          </button>
-        </div>
-        <p class="mt-3 text-sm text-ink-soft">{site.payment.label}.</p>
-      </div>
+    <div class="mt-4">
+      <!-- client:load island; Astro also server-renders it, so the product is
+           visible (with default colours) even without JavaScript. -->
+      <ColorConfigurator client:load product={configProduct} colors={allowed} />
     </div>
   </article>
 

@@ -15,7 +15,15 @@ export interface Catalog {
   source: 'supabase' | 'fixtures';
 }
 
-export async function getCatalog(): Promise<Catalog> {
+let cached: Promise<Catalog> | null = null;
+
+/** Memoized across the build so Header/pages don't re-query Supabase per page. */
+export function getCatalog(): Promise<Catalog> {
+  cached ??= loadCatalog();
+  return cached;
+}
+
+async function loadCatalog(): Promise<Catalog> {
   const url = import.meta.env.PUBLIC_SUPABASE_URL;
   const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 

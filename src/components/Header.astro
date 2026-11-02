@@ -1,30 +1,25 @@
 ---
 import { site } from '@/config/site';
+import { getCatalog } from '@/lib/catalog';
+import CartDrawer from '@/components/islands/CartDrawer.tsx';
 const base = import.meta.env.BASE_URL;
 const home = base.replace(/\/$/, '') || '/';
+const { colors } = await getCatalog();
 ---
 
 <header class="sticky top-0 z-40 bg-paper/85 backdrop-blur border-b border-line">
   <div class="mx-auto max-w-5xl px-4 h-16 flex items-center justify-between gap-4">
-    <a href={home} class="flex items-center gap-2 font-display text-xl font-extrabold tracking-tight">
-      <span class="inline-grid place-items-center w-8 h-8 rounded-xl bg-grape text-white text-sm font-mono rotate-[-6deg]">3D</span>
+    <a href={home} class="flex items-center gap-2 font-display text-lg sm:text-xl font-extrabold tracking-tight">
+      <span class="inline-grid place-items-center w-8 h-8 rounded-xl bg-grape rotate-[-6deg] shrink-0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="4" y="14" width="16" height="4" rx="2" fill="#fff"/>
+          <rect x="6" y="9" width="12" height="4" rx="2" fill="#c4b5fd"/>
+          <rect x="8" y="4" width="8" height="4" rx="2" fill="#fff"/>
+        </svg>
+      </span>
       <span>{site.name}</span>
     </a>
 
-    <!-- Bag: becomes an interactive island in stage 4 -->
-    <button
-      type="button"
-      id="bag-button"
-      class="relative inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-sm font-semibold hover:bg-grape transition-colors"
-      aria-label="Open bag"
-    >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
-        <path d="M3 6h18"/>
-        <path d="M16 10a4 4 0 0 1-8 0"/>
-      </svg>
-      <span>Bag</span>
-      <span id="bag-count" class="hidden min-w-5 h-5 px-1 rounded-full bg-bubble text-white text-xs grid place-items-center">0</span>
-    </button>
+    <CartDrawer client:load colors={colors} />
   </div>
 </header>

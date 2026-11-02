@@ -3,8 +3,8 @@
  * Keep this free of any personal info about the seller (no name, school, town, etc.).
  */
 export const site = {
-  /** Working name of the shop. Change this one line to rebrand. */
-  name: 'PLAyground',
+  /** Shop name. Change this one line to rebrand. */
+  name: 'Layer Cake Prints',
   /** Short tagline shown under the name in the hero. */
   tagline: 'Tiny prints, big personality',
   /** Longer one-liner for meta description / hero sub-copy. */
