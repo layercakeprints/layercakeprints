@@ -26,7 +26,12 @@ npm run dev
 ## Setting up Supabase (step by step)
 
 1. Create a project at <https://supabase.com> (free tier is fine). Pick a region
-   close to you and save the database password.
+   close to you and save the database password. On the create screen:
+   - **Enable Data API:** ON (we use supabase-js).
+   - **Automatically expose new tables:** OFF (manual control; the migrations
+     grant table access explicitly in `0002_rls.sql`).
+   - **Enable automatic RLS:** ON (safety net for any future table).
+   - **Postgres Type:** Postgres (Default), not OrioleDB (beta).
 2. **Get your keys:** Project Settings -> API. Copy the **Project URL** and the
    **anon public** key into `.env` (and later into GitHub Secrets). Never copy
    the `service_role` key anywhere in this repo or the browser.

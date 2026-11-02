@@ -31,6 +31,31 @@ alter table public.order_items            enable row level security;
 alter table public.admins                 enable row level security;
 
 -- ---------------------------------------------------------------------------
+-- Table privileges (explicit, because "Automatically expose new tables" is OFF)
+--
+-- RLS decides WHICH rows; these GRANTs decide which roles may touch the table at
+-- all. Row access is still gated by the policies below:
+--   * anon gets SELECT only on the publicly readable tables.
+--   * authenticated gets full CRUD on shop tables, but the admin policies only
+--     let a user in public.admins actually do anything.
+--   * anon is never granted anything on orders/order_items/admins.
+-- ---------------------------------------------------------------------------
+grant usage on schema public to anon, authenticated;
+
+-- Public read surface
+grant select on public.filament_colors        to anon, authenticated;
+grant select on public.products               to anon, authenticated;
+grant select on public.product_allowed_colors to anon, authenticated;
+
+-- Admin-managed tables (CRUD for signed-in users; RLS narrows to is_admin())
+grant select, insert, update, delete on public.filament_colors        to authenticated;
+grant select, insert, update, delete on public.products               to authenticated;
+grant select, insert, update, delete on public.product_allowed_colors to authenticated;
+grant select, insert, update, delete on public.orders                 to authenticated;
+grant select, insert, update, delete on public.order_items            to authenticated;
+grant select                         on public.admins                 to authenticated;
+
+-- ---------------------------------------------------------------------------
 -- filament_colors
 -- ---------------------------------------------------------------------------
 drop policy if exists colors_public_read on public.filament_colors;
