@@ -1,0 +1,30 @@
+# build output
+dist/
+.output/
+
+# dependencies
+node_modules/
+
+# astro
+.astro/
+
+# env - never commit real keys
+.env
+.env.*
+!.env.example
+
+# logs
+npm-debug.log*
+*.log
+
+# os / editor
+.DS_Store
+.vscode/
+.idea/
+
+# test
+coverage/
+
+# supabase local
+supabase/.branches/
+supabase/.temp/
